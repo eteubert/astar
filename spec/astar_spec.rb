@@ -41,8 +41,50 @@ describe Astar do
       e4 = n4.connectWith(n5, 2)
       e5 = n5.connectWith(n3, 2)
       
-      
       Astar::run(n1, n3)
+      n3.path.reverse.map(&:name).join(" -> ").should == "N1 -> N4 -> N5 -> N3"
+    end
+    
+    it "should accept an heuristic" do
+      module Astar
+        class Node
+          # add coordinates
+          attr_accessor :x, :y
+        end
+      end
+      #         e4
+      #      n4 -- n5
+      #  e3 /         \ e5
+      #   n1 -- n2 -- n3
+      #      e1    e2
+      n1 = Astar::Node.new("N1")
+      n1.x = 0
+      n1.y = 0
+      n2 = Astar::Node.new("N2")
+      n2.x = 2
+      n2.y = 0
+      n3 = Astar::Node.new("N3")
+      n3.x = 4
+      n3.y = 0
+      n4 = Astar::Node.new("N4")
+      n4.x = 1
+      n4.y = 2
+      n5 = Astar::Node.new("N5")
+      n5.x = 3
+      n5.y = 2
+
+      e1 = n1.connectWith(n2, 1)
+      e2 = n2.connectWith(n3, 7)
+      e3 = n1.connectWith(n4, 2)
+      e4 = n4.connectWith(n5, 2)
+      e5 = n5.connectWith(n3, 2)
+      
+      heuristic = Proc.new do |node1, node2|
+        # pythagoras
+        Math.sqrt(((node2.x - node1.x) ** 2).abs + ((node2.y - node1.y) ** 2).abs)
+      end
+      
+      Astar::run(n1, n3, heuristic)
       n3.path.reverse.map(&:name).join(" -> ").should == "N1 -> N4 -> N5 -> N3"
     end
   end
