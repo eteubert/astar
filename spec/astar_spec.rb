@@ -50,6 +50,12 @@ describe Astar do
         class Node
           # add coordinates
           attr_accessor :x, :y
+          
+          def connectWithAndCalcWeightFromCoordinates(node)
+            weight = Math.sqrt(((node.x - self.x) ** 2).abs + ((node.y - self.y) ** 2).abs)
+            connectWith(node, weight)
+          end
+          
         end
       end
       #         e4
@@ -62,22 +68,22 @@ describe Astar do
       n1.y = 0
       n2 = Astar::Node.new("N2")
       n2.x = 2
-      n2.y = 0
+      n2.y = -3
       n3 = Astar::Node.new("N3")
       n3.x = 4
       n3.y = 0
       n4 = Astar::Node.new("N4")
       n4.x = 1
-      n4.y = 2
+      n4.y = 1
       n5 = Astar::Node.new("N5")
       n5.x = 3
-      n5.y = 2
+      n5.y = 1
 
-      e1 = n1.connectWith(n2, 1)
-      e2 = n2.connectWith(n3, 7)
-      e3 = n1.connectWith(n4, 2)
-      e4 = n4.connectWith(n5, 2)
-      e5 = n5.connectWith(n3, 2)
+      e1 = n1.connectWithAndCalcWeightFromCoordinates(n2)
+      e2 = n2.connectWithAndCalcWeightFromCoordinates(n3)
+      e3 = n1.connectWithAndCalcWeightFromCoordinates(n4)
+      e4 = n4.connectWithAndCalcWeightFromCoordinates(n5)
+      e5 = n5.connectWithAndCalcWeightFromCoordinates(n3)
       
       heuristic = Proc.new do |node1, node2|
         # pythagoras
