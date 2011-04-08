@@ -87,7 +87,7 @@ describe Astar do
       
       heuristic = Proc.new do |node1, node2|
         # pythagoras
-        Math.sqrt(((node2.x - node1.x) ** 2).abs + ((node2.y - node1.y) ** 2).abs)
+        Math.sqrt(((node2.x - node1.x) ** 2) + ((node2.y - node1.y) ** 2))
       end
       
       Astar::run(n1, n3, heuristic)
